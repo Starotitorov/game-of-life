@@ -96,6 +96,7 @@ function returnBack() {
     return;
   }
   stringWithStates = arrayOfGenerations.pop();
+  s.value = stringWithStates;
   drawGrid();
   var amount = parseInt(number_of_steps.value); 
   number_of_steps.value = (amount - 1).toString();
