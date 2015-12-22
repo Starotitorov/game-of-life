@@ -2,7 +2,7 @@
 <h1>Sign up</h1>
 <div class="row">
   <div class="container center-block span6 offset3">
-  <%= form_for(@user, html: { multipart: true }) do |f|%>
+  <%= form_for(@user, html: { multipart: true, autocomplete: "off" }) do |f|%>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.label :name%>
     <%= f.text_field :name %>
