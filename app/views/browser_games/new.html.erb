@@ -1,0 +1,106 @@
+<% provide(:title, "#{current_user.name} | #{"Create new game"}")%>
+<div class="back-link">
+  <%= link_to "Back", user_path(current_user) %>
+</div>
+<h1>Create new game</h1>
+<div class="row">
+  <div class="container center-block offset3">
+    <%= form_for(@browser_game) do |f|%>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= f.label :name %>
+      <%= f.text_field :name%>
+      <%= f.hidden_field :status, id: "status" %>
+      <%= f.hidden_field :amount_of_steps, id: "amount_of_steps" %>
+      <div class="field">
+        <canvas id="field">
+        </canvas>
+      </div>
+      <script>
+var NUMBER_OF_COLUMNS = 10;
+var NUMBER_OF_ROWS = 10;
+var SIZE_OF_CELL = 40;
+var WIDTH_OF_BORDER = 5;
+var field = document.getElementById("field"),
+  ctx = field.getContext('2d');
+var s = document.getElementById("status");
+var stringWithStates = new String("<%= '0' * 100 %>");
+function drawGrid() {
+  field.width = NUMBER_OF_COLUMNS * (SIZE_OF_CELL + WIDTH_OF_BORDER)
+    + WIDTH_OF_BORDER;
+  field.height = NUMBER_OF_ROWS * (SIZE_OF_CELL + WIDTH_OF_BORDER)
+    + WIDTH_OF_BORDER;
+  var grad = ctx.createLinearGradient(0, 0, field.width, field.height);
+  grad.addColorStop(0.0, 'black');
+  grad.addColorStop(1.0, 'gray');
+  ctx.strokeStyle = grad;
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, field.width, field.height);
+  var isAlive = false;
+  var x, y;
+  for (i = 0; i < NUMBER_OF_ROWS; ++i) {
+    for (j = 0; j < NUMBER_OF_COLUMNS; ++j) {
+      x = j * (SIZE_OF_CELL + WIDTH_OF_BORDER) + WIDTH_OF_BORDER;
+      y = i * (SIZE_OF_CELL + WIDTH_OF_BORDER) + WIDTH_OF_BORDER;
+      if (stringWithStates.charAt(i * NUMBER_OF_ROWS + j) == '1') {
+        isAlive = true;
+      }
+      else {
+        isAlive = false;
+      }
+      drawCell(x, y, isAlive);
+    }
+  }
+}
+
+function drawCell(coordXOfCell, coordYOfCell, isAlive) {
+  if (isAlive) {
+    ctx.fillStyle = 'yellow';
+  }
+  else {
+    ctx.fillStyle = 'white';
+  }
+  ctx.fillRect(coordXOfCell, coordYOfCell, SIZE_OF_CELL, SIZE_OF_CELL);
+}
+
+field.addEventListener("mousedown", drawCellWithChanges, false);
+
+function drawCellWithChanges(event) {
+  var x = event.pageX;
+  var y = event.pageY;
+  x -= field.offsetLeft;
+  y -= field.offsetTop;
+  var i = Math.floor(y / (SIZE_OF_CELL + WIDTH_OF_BORDER));
+  var j = Math.floor(x / (SIZE_OF_CELL + WIDTH_OF_BORDER));
+  if (i == NUMBER_OF_ROWS) {
+    --i;
+  }
+  if(j == NUMBER_OF_COLUMNS) {
+    --j;
+  }
+  coordX = j * (SIZE_OF_CELL + WIDTH_OF_BORDER) + WIDTH_OF_BORDER;
+  coordY = i * (SIZE_OF_CELL + WIDTH_OF_BORDER) + WIDTH_OF_BORDER;
+  var index = i * NUMBER_OF_ROWS + j;
+  var isAlive = false;
+  if (stringWithStates.charAt(index) == '0') {
+    stringWithStates = stringWithStates.slice(0, index) + "1"
+                     + stringWithStates.slice(index + 1,
+                                              NUMBER_OF_ROWS *
+                                              NUMBER_OF_COLUMNS);
+    isAlive = true;
+  }
+  else {
+    stringWithStates = stringWithStates.slice(0, index) +"0"
+                     + stringWithStates.slice(index + 1, 
+                                              NUMBER_OF_ROWS * 
+                                              NUMBER_OF_COLUMNS);
+    isAlive = false;
+  }
+  s.value = stringWithStates;
+  drawCell(coordX, coordY, isAlive);
+}
+drawGrid();
+      </script>
+      <%= f.submit "Create new game" %>
+    <% end%>
+  </div>
+</div>

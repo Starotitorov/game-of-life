@@ -1,0 +1,6 @@
+<% provide(:title, " | #{current_user.name} | #{@browser_game.name}")%>
+<h1><%= @browser_game.name %></h1>
+<canvas id="field">
+</canvas>
+<span>Amount of steps: <%= @browser_game.amount_of_steps %>.</span>
+<input type="button", onclick="step()" value="Next step">

@@ -1,0 +1,38 @@
+<% provide(:title, @user.name) %>
+<div class="row">
+  <aside class="col-sm-3 col-md-2 sidebar">
+    <section>
+      <h1>
+        <p><%= image_tag @user.avatar.url(:small) %></p>
+        <p><%= @user.name %></p>
+      </h1>
+    </section>
+  </aside>
+  <div class="col-md-4">
+    <% if current_user?(@user) %>
+      <h3>
+        <%= link_to "Create new game", new_browser_game_path %>
+      </h3>
+    <% end %>
+    <% if @user.browser_games.any? %>
+      <h3>Games (<%= @user.browser_games.count %>)</h3>
+      <ul class="browser-games">
+        <% @browser_games.each do |game| %>
+          <li>
+            <span class="content"><%= game.name %></span>
+            <% if current_user?(@user) %>
+              <span class="span-with-link"><%= link_to "Play" , edit_browser_game_path(game) %></span>
+              <span class="span-with-link"><%= link_to "Delete", game, method: :delete,
+                                          data: { confirm: "Are you sure?" },
+                                          title: game.name %></span><br>
+            <% end %>
+            <span class="timestamp">
+              Created <%= time_ago_in_words(game.created_at) %> ago.
+            </span>
+          </li>
+        <% end %>
+      </ul>
+      <%= will_paginate @browser_games %>
+    <% end %>
+  </div>
+</div>

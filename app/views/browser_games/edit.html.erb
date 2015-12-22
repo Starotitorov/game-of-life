@@ -1,0 +1,140 @@
+<% provide(:title, "#{current_user.name} | #{@browser_game.name}") %>
+<div class="back-link">
+  <%= link_to "Back", user_path(current_user) %>
+</div>
+<h1><%= @browser_game.name %></h1>
+<div class="field">
+  <%= form_for(@browser_game) do |f|%>
+    <%= f.hidden_field :status, id: "status" %>
+    <%= f.hidden_field :amount_of_steps, id: "amount-of-steps" %>
+    <canvas id="field">
+    </canvas>
+    <script>
+var NUMBER_OF_COLUMNS = 10;
+var NUMBER_OF_ROWS = 10;
+var SIZE_OF_CELL = 40;
+var WIDTH_OF_BORDER = 5;
+var stringWithStates = new String("<%= @browser_game.status %>");
+var field = document.getElementById("field"),
+  ctx = field.getContext('2d');
+var number_of_steps = document.getElementById("amount-of-steps");
+var s = document.getElementById("status");
+var field_with_amount_of_steps = document.getElementById("field-with-amount-of-steps");
+var arrayOfGenerations = new Array();
+function evolve() {
+  field_with_amount_of_steps = document.getElementById("field-with-amount-of-steps");
+  evolveCellGeneration();
+  drawGrid();
+  var amount = parseInt(number_of_steps.value); 
+  number_of_steps.value = (amount + 1).toString();
+  field_with_amount_of_steps.innerText = "Amount of steps: "
+                                       + number_of_steps.value + ".";
+}
+
+function drawGrid() {
+  field.width = NUMBER_OF_COLUMNS * (SIZE_OF_CELL + WIDTH_OF_BORDER)
+    + WIDTH_OF_BORDER;
+  field.height = NUMBER_OF_ROWS * (SIZE_OF_CELL + WIDTH_OF_BORDER)
+    + WIDTH_OF_BORDER;
+  var grad = ctx.createLinearGradient(0, 0, field.width, field.height);
+  grad.addColorStop(0.0, 'black');
+  grad.addColorStop(1.0, 'gray');
+  ctx.strokeStyle = grad;
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, field.width, field.height);
+  var isAlive = false;
+  var x, y;
+  for (i = 0; i < NUMBER_OF_ROWS; ++i) {
+    for (j = 0; j < NUMBER_OF_COLUMNS; ++j) {
+      x = j * (SIZE_OF_CELL + WIDTH_OF_BORDER) + WIDTH_OF_BORDER;
+      y = i * (SIZE_OF_CELL + WIDTH_OF_BORDER) + WIDTH_OF_BORDER;
+      if (stringWithStates.charAt(i * NUMBER_OF_ROWS + j) == '1') {
+        isAlive = true;
+      }
+      else {
+        isAlive = false;
+      }
+      drawCell(x, y, isAlive);
+    }
+  }
+}
+
+function drawCell(coordXOfCell, coordYOfCell, isAlive) {
+  if (isAlive) {
+    ctx.fillStyle = 'yellow';
+  }
+  else {
+    ctx.fillStyle = 'white';
+  }
+  ctx.fillRect(coordXOfCell, coordYOfCell, SIZE_OF_CELL, SIZE_OF_CELL);
+}
+
+function evolveCellGeneration() {
+  arrayOfGenerations.push(stringWithStates);
+  tempStringWithStates = stringWithStates;
+  var position, state;
+  for(i = 0; i < NUMBER_OF_ROWS; ++i) {
+    for (j = 0; j < NUMBER_OF_COLUMNS; ++j) {
+      position = i * NUMBER_OF_ROWS + j;
+      state = tempStringWithStates.charAt(position);
+      var numberOfAliveNeighbors = countNumberOfAliveNeighbors(tempStringWithStates, i, j);
+      if (state == '1' && !(numberOfAliveNeighbors == 2 || numberOfAliveNeighbors == 3))
+      {
+        stringWithStates = stringWithStates.slice(0, position) + "0" + stringWithStates.slice(position + 1,  stringWithStates.length);
+      }
+      if (state == '0' && numberOfAliveNeighbors == 3)
+      {
+          stringWithStates = stringWithStates.slice(0, position) + "1" + stringWithStates.slice(position + 1, stringWithStates.length);
+      }
+    }
+  }
+  s.value = stringWithStates;
+}
+
+function returnBack() {
+  if (arrayOfGenerations.length == 0) {
+    return;
+  }
+  stringWithStates = arrayOfGenerations.pop();
+  drawGrid();
+  var amount = parseInt(number_of_steps.value); 
+  number_of_steps.value = (amount - 1).toString();
+  field_with_amount_of_steps.innerText = "Amount of steps: "
+                                       + number_of_steps.value + ".";
+}
+
+function countNumberOfAliveNeighbors(s, numberOfRow, numberOfColumn) {
+  var numberOfAliveNeighbors = 0;
+  for (t = numberOfRow - 1; t <= numberOfRow + 1; ++t) {
+    for (k = numberOfColumn - 1; k <= numberOfColumn + 1; ++k) {
+      if (t == numberOfRow && k == numberOfColumn)
+        continue;
+      var currentRow = t;
+      var currentColumn = k;
+      if (t < 0) {
+        currentRow = NUMBER_OF_ROWS - 1;
+      }
+      if (t > NUMBER_OF_ROWS - 1) {
+        currentRow = 0;
+      }
+      if (k < 0) {
+        currentColumn = NUMBER_OF_COLUMNS - 1;
+      }
+      if (k > NUMBER_OF_COLUMNS - 1) {
+        currentColumn = 0;
+      }
+      if (s.charAt(currentRow * NUMBER_OF_ROWS + currentColumn) == '1') {
+        ++numberOfAliveNeighbors;
+      }
+    }
+  }
+  return numberOfAliveNeighbors;
+}
+drawGrid();
+    </script>
+    <p id="field-with-amount-of-steps">Amount of steps: <%= @browser_game.amount_of_steps %>.</p>
+    <%= f.submit "Save changes" %>
+  <% end %>
+  <button onclick="evolve();">Next step</button>
+  <button onclick="returnBack();">Previous step</button>
+</div>

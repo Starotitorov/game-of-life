@@ -1,0 +1,170 @@
+@import "bootstrap";
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  margin-right: 80px;
+  margin-left: 80px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+h2 {
+  color: gray;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+p {
+  font-size: 1.1em;
+}
+
+
+#logo {
+  float: left;
+  height: 50px;
+  padding: 15px 15px;
+  font-size: 18px;
+  color: gray;
+  line-height: 20px;
+}
+
+footer {
+  margin-top: 50px;
+  padding-top: 5px;
+  color: black;
+  div {
+    float: left;
+    margin: 10px;
+  }
+  ul {
+    float: right;
+    list-style: none;
+    li {
+      float: left;
+      margin-left: 10px;
+    }
+  }
+}
+
+aside {
+  width: 100px;
+  section {
+    padding: 10px, 0;
+    border-top: 1px solid gray;
+    &:first-child {
+      border: 0;
+      padding-top: 0;
+    }
+    span {
+      display: block;
+      margin-bottom: 3px;
+      line-height: 1;
+    }
+    h1 {
+      font-size: 1.4em;
+      text-align: center;
+      letter-spacing: -1px;
+      margin-bottom: 3px;
+      margin-top: 0px;
+    }
+  }
+}
+
+input, textarea, select, label, #error_explanation {
+  width: 50%;
+  margin-bottom:15px;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+input {
+  height: auto
+}
+
+#error_explanation {
+  color: #f00;
+  ul {
+    margin: 0;
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
+}
+
+.field_with_errors {
+  @extend .has-error;
+}
+
+.users {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-top: 1px solid gray;
+    &:last-child {
+      border-bottom: 1px solid gray;
+    }
+  }
+}
+
+.browser-games {
+  list-style: none;
+  margin: 10px 0 0 0;
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+}
+.content {
+  display: block;
+}
+.timestamp {
+  color: gray;
+}
+
+aside {
+  textarea {
+    height: 100px;
+    margin-bottom: 5px;
+  }
+}
+
+.span-with-link {
+  margin: 10px 10px 10px 0px;
+}
+
+.field {
+  text-align: center;
+  button {
+    width: 50%;
+    margin-bottom: 15px;
+  }
+}
+
+.back-link {
+  font-size: 2em;
+  float: left;
+}

@@ -1,0 +1,12 @@
+<% provide(:title, "#{current_user.name} | #{"Create new game"}")%>
+<h1>Create new game</h1>
+<div class="row">
+  <div class="container center-block offset3">
+    <%= form_for(@browser_game) do |f|%>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= f.label :name %>
+      <%= f.text_field :name%>
+      <%= f.submit "Create new game", class: "btn btn-large btn-primary" %>
+    <% end%>
+  </div>
+</div>
