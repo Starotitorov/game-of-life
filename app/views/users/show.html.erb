@@ -3,7 +3,7 @@
   <aside class="col-sm-3 col-md-2 sidebar">
     <section>
       <h1>
-        <p><%= image_tag @user.avatar.url(:small) %></p>
+        <p><%= gravatar_for @user %><p>
         <p><%= @user.name %></p>
       </h1>
     </section>

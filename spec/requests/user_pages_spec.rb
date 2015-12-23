@@ -58,7 +58,6 @@ describe "User pages" do
       before do
         fill_in "Name", with: "Example User"
         fill_in "Email", with: "user@example.com"
-        attach_file "Avatar", Rails.root + 'spec/fixtures/image.png'
         fill_in "Password", with: "password"
         fill_in "Confirmation", with: "password"
       end

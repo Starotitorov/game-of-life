@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe User do
   before { @user = User.new(name: "Example User", email: "user@example.com", password: "password",
-    password_confirmation: "password", avatar: File.new(Rails.root + 'spec/fixtures/image.png')) }
+    password_confirmation: "password") }
   subject { @user }
   
   it { should respond_to(:name) }
@@ -14,12 +14,6 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:admin) }
   it { should respond_to(:authenticate) }
-  it { should have_attached_file(:avatar) }
-  it { should validate_attachment_presence(:avatar) }
-  it { should validate_attachment_content_type(:avatar).allowing("image/png", "image/jpg",
-                                                        "image/jpeg", "image/gif").
-                                                        rejecting('text/plain', 'text/xml') }
-  it { should validate_attachment_size(:avatar).in 0..10.megabytes }
   it { should be_valid }
   it { should_not be_admin}
 
