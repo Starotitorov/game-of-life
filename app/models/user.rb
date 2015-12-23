@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_attached_file :avatar, styles: { small: "100x100" }
   validates_attachment :avatar, presence: true,
-      content_type: { content_type: ["image/png", "image/jpg", "image/jpeg", "image/gif"] },
+      content_type: { content_type: ["image/png", "image/gif"] },
       size: { in: 0..10.megabytes }
   def User.new_remember_token
     SecureRandom.urlsafe_base64

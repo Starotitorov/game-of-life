@@ -1,12 +1,6 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    User.create!(name: "Artem",
-                email: "starotitorov1997@gmail.com",
-                avatar: File.new(Rails.root + 'spec/fixtures/3.png'),
-                password: "artem",
-                password_confirmation: "artem",
-                admin: true)
     array_of_files_with_avatars = ["1.jpg", "2.jpg", "3.png", "4.jpg", "5.jpg"]
     4.times do |n|
       name  = Faker::Name.name
